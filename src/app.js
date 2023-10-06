@@ -1,6 +1,6 @@
 
 const express=require('express');
-require('dotenv').config()
+require('dotenv').config();
 const bodyParser = require('body-parser');
 
 const cors = require('cors');
@@ -11,7 +11,7 @@ const userRoute=require("./Routes/user.js");
 
 
 const app=express();
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json())
 app.use(cors());
 // routing
@@ -30,7 +30,7 @@ db.then((e)=>{
 })
 
 
-const PORT=process.env.PORT;
+const PORT=process.env.PORT || 4444;
 app.listen(PORT,(error)=>{
     if(error){
         {"port is not started error is",error}
