@@ -1,6 +1,6 @@
-const check = require("../check/user");
+const check = require("../utility/user");
 const userModel = require("../model/user");
-
+const jwt_utility = require("../utility/jwt");
 // user class
 class User {
   constructor(name, email, password,verified) {
@@ -10,9 +10,11 @@ class User {
     this.verified=verified;
   }
 }
-
+module.exports.devloper=async(req,res)=>{
+  res.send("ok")
+}
 module.exports.signup = async (req, res) => {
-  console.log(["#<--login controller start"]);
+  console.log(["#<--signip controller start"]);
   try {
     const email = req.body.email;
     const password =  req.body.password;
@@ -52,8 +54,8 @@ if (email==undefined || password==undefined ||name==undefined ) {
         .status(200)
         .json({
           status: 200,
-          msg: "user signup sucessful",
-          data: { jwtKey: "", email: email },
+          msg: "user signup sucessful,please login now",
+          data: { email: email },
         });
     }
 
@@ -96,6 +98,7 @@ module.exports.login = async (req, res) => {
       const user_data_db=await userModel.find({"email":email});
     //   console.log(user_data_db)
       const encrypt_passowrd=user_data_db[0].password;
+      const userId=user_data_db[0]?._id
       // console.log(encrypted_psd)
 
     //   comapre passwword
@@ -110,12 +113,12 @@ if(result==false){
     });
     return ;
 }
-
+const jwt_token=await jwt_utility.jwt_token_Generate({email:email,userId:userId})
       res.status(200)
         .json({
           resp: true,
           msg: "user login sucessful",
-          data: { jwtKey: "", email: email },
+          data: { jwtKey: jwt_token},
         });  
 } catch (error) {
     console.log(error);
